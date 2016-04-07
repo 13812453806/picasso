@@ -108,25 +108,27 @@ public class UtilsTest {
 
   @Test public void getResourceById() throws IOException {
     Request request = new Request.Builder(RESOURCE_ID_URI).build();
-    Resources resources = Utils.getResources(mockPackageResourceContext(), request);
-    int id = Utils.getResourceId(resources, request);
+    Resources res = Utils.getResources(mockPackageResourceContext(), request);
+    int id = Utils.getResourceId(res, request);
     assertThat(id).isEqualTo(RESOURCE_ID_1);
   }
 
   @Test public void getResourceByTypeAndName() throws IOException {
     Request request = new Request.Builder(RESOURCE_TYPE_URI).build();
-    Resources resources = Utils.getResources(mockPackageResourceContext(), request);
-    int id = Utils.getResourceId(resources, request);
+    Resources res = Utils.getResources(mockPackageResourceContext(), request);
+    int id = Utils.getResourceId(res, request);
     assertThat(id).isEqualTo(RESOURCE_ID_1);
   }
 
   @Test @Config(reportSdk=GINGERBREAD) public void useOkHttpByDefault() throws Exception {
     Downloader downloader = Utils.createDefaultDownloader(Robolectric.application);
-    assertThat(downloader).isInstanceOf(OkHttpDownloader.class);
+    assertThat(downloader).isInstanceOf(OkHttp3Downloader.class);
   }
 
   @Test @Config(reportSdk=FROYO) public void noOkHttpInFroyo() throws Exception {
     Downloader downloader = Utils.createDefaultDownloader(Robolectric.application);
-    assertThat(downloader).isNotInstanceOf(OkHttpDownloader.class);
+    assertThat(downloader)
+        .isNotInstanceOf(OkHttpDownloader.class)
+        .isNotInstanceOf(OkHttp3Downloader.class);
   }
 }
